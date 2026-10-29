@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyse transactionnelle et PNL – BTS CCST</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap">
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Fiche d'exercices en thème clair : blocs = séances, cartes dépliables, corrections masquables */
+:root {
+  --bg:        #f4f6f9;
+  --surface:   #ffffff;
+  --card:      #ffffff;
+  --border:    #dfe3ea;
+  --border-hi: #b9c0ce;
+  --text:      #1d2230;
+  --text-dim:  #5c6476;
+  --accent:    #b97d00;
+  --accent-bg: #fff6df;
+  --green:     #1b8047;
+  --green-bg:  #ecf7f0;
+  --green-bd:  #c9e6d4;
+  --green-dk:  #12552f;
+  --red:       #c23b3b;
+  --blue:      #2d69ad;
+  --blue-bg:   #edf3fb;
+  --purple:    #6f45ad;
+  --font-head: 'Syne', 'Trebuchet MS', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius:    10px;
+  color-scheme: light;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── HEADER ──────────────────────────────────────────────── */
+.site-header {
+  background: linear-gradient(135deg, #ffffff 0%, #eef2f8 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 44px 20px 32px;
+  text-align: center;
+}
+.site-header .kicker {
+  display: inline-block;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 3px;
+  margin-bottom: 18px;
+}
+.site-header h1 {
+  font-family: var(--font-head);
+  font-size: clamp(24px, 6vw, 38px);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.site-header .sub {
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 540px;
+  margin: 0 auto 20px;
+}
+.legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 auto 22px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+/* ── NAV ANCRES ──────────────────────────────────────────── */
+.nav-anchors {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.nav-anchors a {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.nav-anchors a:hover, .nav-anchors a:focus-visible { border-color: var(--accent); color: var(--accent); }
+
+/* ── CONTENEUR PRINCIPAL ─────────────────────────────────── */
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 36px 18px 80px;
+}
+
+/* ── TITRE DE BLOC ───────────────────────────────────────── */
+.bloc-titre {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 52px 0 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.bloc-titre:first-child { margin-top: 0; }
+.bloc-titre .icone { font-size: 26px; flex-shrink: 0; }
+.bloc-titre h2 {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.bloc-titre h2 small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+/* ── MÉMO ────────────────────────────────────────────────── */
+.memo {
+  background: var(--green-bg);
+  border: 1px solid var(--green-bd);
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.memo .memo-titre {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.memo code {
+  display: block;
+  background: #ffffff;
+  border: 1px solid var(--green-bd);
+  border-radius: 5px;
+  padding: 8px 12px;
+  color: var(--green-dk);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13.5px;
+  margin: 5px 0;
+}
+.memo .note { color: var(--text-dim); font-size: 13px; margin-top: 8px; }
+
+/* ── CARTE EXERCICE ──────────────────────────────────────── */
+.exo-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.exo-card:hover { border-color: var(--border-hi); }
+
+.exo-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+.exo-header::-webkit-details-marker { display: none; }
+.exo-header:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.exo-num {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 40px;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.badge-1 { background: #e9f6ee; color: var(--green); border: 1px solid #bfe2cc; }
+.badge-2 { background: var(--accent-bg); color: #8a5d00; border: 1px solid #efd798; }
+.badge-3 { background: #fbeaea; color: var(--red); border: 1px solid #efc4c4; }
+.badge-exam { background: #f2ecfa; color: var(--purple); border: 1px solid #d9c9ef; }
+
+.exo-titre-txt {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.chevron { color: var(--text-dim); font-size: 13px; flex-shrink: 0; transition: transform .2s; }
+details[open] .chevron { transform: rotate(180deg); }
+
+/* ── CORPS DE L'EXERCICE ─────────────────────────────────── */
+.exo-body { padding: 0 16px 20px; border-top: 1px solid var(--border); }
+
+.contexte {
+  background: var(--blue-bg);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 6px 6px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.contexte strong { color: var(--text); }
+
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+.tableau-donnees {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--surface);
+}
+.tableau-donnees th {
+  background: #eef1f6;
+  color: var(--text-dim);
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.tableau-donnees td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.tableau-donnees tr:last-child td { border-bottom: none; }
+.tableau-donnees td.num { font-weight: 700; color: var(--text); white-space: nowrap; }
+
+.questions { margin: 18px 0 0; }
+.question { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+.question .q-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.question p { font-size: 14px; margin: 0; min-width: 0; }
+
+/* ── COUP DE POUCE ───────────────────────────────────────── */
+.ordre-grandeur {
+  background: var(--accent-bg);
+  border: 1px solid #efd798;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #6e4b00;
+  margin: 12px 0 0;
+}
+.ordre-grandeur::before { content: "💡 "; }
+
+/* ── BOUTON CORRECTION ───────────────────────────────────── */
+.btn-corrige {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 16px;
+  margin-top: 18px;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-corrige:hover, .btn-corrige:focus-visible { border-color: var(--green); color: var(--green); }
+
+/* ── CORRECTION ──────────────────────────────────────────── */
+.correction {
+  display: none;
+  background: var(--green-bg);
+  border: 1px solid var(--green-bd);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.correction.visible { display: block; }
+.correction .corr-etape {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--green-bd);
+}
+.correction .corr-etape:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.correction .c-num {
+  display: inline-block;
+  background: var(--green);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 18px;
+  margin-right: 6px;
+}
+.correction code {
+  display: block;
+  background: #ffffff;
+  border: 1px solid var(--green-bd);
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: var(--green-dk);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  margin: 5px 0;
+}
+.correction .res { font-family: var(--font-head); font-weight: 700; color: var(--text); }
+.correction .conclu { margin-top: 8px; font-size: 13.5px; color: #2c6244; font-style: italic; }
+.correction .tableau-corr { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; background: #ffffff; }
+.correction .tableau-corr th {
+  background: #dff0e6;
+  color: var(--green-dk);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  text-align: left;
+}
+.correction .tableau-corr td { padding: 6px 10px; border-bottom: 1px solid var(--green-bd); color: #24402f; vertical-align: top; }
+.correction .tableau-corr td.val { font-weight: 700; color: var(--green); }
+
+/* ── SÉPARATEUR ──────────────────────────────────────────── */
+hr.section-sep { border: none; border-top: 1px solid var(--border); margin: 54px 0 0; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 12px;
+  background: var(--surface);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .exo-titre-txt { font-size: 13.5px; }
+  .contexte { font-size: 13.5px; }
+  .tableau-donnees { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="kicker">🧠 Bloc 1 – BTS CCST 2e année · épreuve E5</div>
+  <h1>Pratiquer l'analyse transactionnelle<br>et la PNL en négociation</h1>
+  <p class="sub">Chapitre 9. 19 exercices en 5 séances, avec l'entreprise THERMIKA. Ouvre un exercice, réponds sur ton ordinateur, puis vérifie avec la correction.</p>
+  <div class="legende">
+    <span class="badge badge-1">⬆ décollage</span> je découvre
+    <span class="badge badge-2">◆ intermédiaire</span> j'applique
+    <span class="badge badge-exam">★ examen</span> je m'entraîne
+  </div>
+  <nav class="nav-anchors">
+    <a href="#referentiel">0 · Repères</a>
+    <a href="#etats">1 · Les trois états du moi</a>
+    <a href="#transactions">2 · Les transactions</a>
+    <a href="#positions">3 · Positions de vie et signes de reconnaissance</a>
+    <a href="#pnl">4 · La PNL et les canaux sensoriels</a>
+    <a href="#examen">5 · Sujets type examen</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="bloc-titre" id="referentiel">
+  <span class="icone">📌</span>
+  <h2><small>Repères · référentiel BTS CCST</small>Ce que tu travailles dans ce chapitre</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 épreuve E5 – bloc 1</div>
+  <code>Compétences : C1.1 préparer une négociation technique et commerciale (savoirs : analyse de la relation interpersonnelle · connaissance de soi et prise en compte de l'autre · personnalité) · C1.2 conseiller, prescrire et communiquer tout au long du processus de négociation · C1.4 mettre en œuvre l'entretien de vente technico-commercial.</code>
+  <code>Critères d'évaluation : le contexte technico-commercial et les attentes du prospect sont identifiés · une démarche proactive de négociation est mise en œuvre · des outils de communication et de négociation adaptés au contexte sont mobilisés · des actions de suivi sont effectuées.</code>
+  <code>Objectif final : décrire le profil relationnel de ton interlocuteur dans ta fiche descriptive, puis adapter ta communication pendant une négociation simulée de 5 minutes.</code>
+</div>
+<div class="memo">
+  <div class="memo-titre">📚 sources utilisées</div>
+  <code>Manuel Nathan, partie 2 « Négocier et accompagner la relation client », fiche ressource 5 « Pratiquer l'analyse transactionnelle (AT) », p. 164.</code>
+  <code>Guide d'accompagnement pédagogique du BTS CCST (2021), compétence C1.1 : communication interpersonnelle, écoute active, reformulation, connaissance de soi et prise en compte de l'autre.</code>
+  <code>Eric Berne, Analyse transactionnelle et psychothérapie (1961) et Des jeux et des hommes (1964) : états du moi, transactions, signes de reconnaissance.</code>
+  <code>Thomas A. Harris, D'accord avec soi et les autres (1967) · Franklin Ernst, « The OK Corral », Transactional Analysis Journal (1971) : positions de vie.</code>
+  <code>Olivier Juilliard, « Analyse transactionnelle », Encyclopædia Universalis (universalis.fr) : transactions parallèles, croisées et cachées.</code>
+  <code>Richard Bandler et John Grinder, Les secrets de la communication (Frogs into Princes, 1979) : canaux sensoriels et synchronisation.</code>
+  <code>Regard critique sur la PNL : Tomasz Witkowski, Polish Psychological Bulletin (2010) · Jackie Sturt et al., British Journal of General Practice (2012).</code>
+</div>
+<hr class="section-sep">
+
+<!-- BLOC 1 -->
+<div class="bloc-titre" id="etats">
+  <span class="icone">🎭</span>
+  <h2><small>Séance 1</small>Bloc 1 – Qui parle : le parent, l'adulte ou l'enfant ?</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Analyse transactionnelle (AT) = méthode d'analyse de la communication créée par Eric Berne · trois états du moi cohabitent en chaque personne, aucun n'est supérieur aux autres.</code>
+  <code>Parent (l'appris) = valeurs, normes, règles · parent nourricier (PN) : soutient, aide, rassure · parent critique (PC) : juge, ordonne, sanctionne.</code>
+  <code>Adulte (le pensé) = logique, analyse, faits · il questionne, écoute, vérifie, prend du recul.</code>
+  <code>Enfant (le senti) = émotions, désirs, besoins · enfant libre (EL) : spontané, enthousiaste ou en colère · enfant adapté (EA) : soumis ou rebelle face à l'autorité.</code>
+  <code>Indices de repérage = les mots (« il faut », « je comprends », « super ! ») · le ton · les gestes et la posture.</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 1</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Le jeu des 8 phrases : quel état du moi ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Tu es technico-commercial(e) en alternance chez <strong>THERMIKA</strong>, entreprise de 38 salariés qui conçoit et installe des pompes à chaleur et des systèmes de ventilation pour les bâtiments tertiaires. Ta tutrice, <strong>Sandrine Morel</strong>, projette 8 phrases entendues en rendez-vous. Jeu en équipes de 3 : 20 secondes par phrase, 1 point par bonne réponse.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>N°</th><th>Phrase entendue</th></tr></thead><tbody><tr><td>1</td><td>« Vos techniciens sont encore arrivés en retard, c'est inadmissible. »</td></tr><tr><td>2</td><td>« Quelle est la consommation annuelle de ce modèle en kWh ? »</td></tr><tr><td>3</td><td>« Génial, j'ai hâte de voir ça installé ! »</td></tr><tr><td>4</td><td>« Ne vous inquiétez pas, on va trouver une solution ensemble. »</td></tr><tr><td>5</td><td>« Si mon directeur dit oui, alors je signe, moi je ne décide rien. »</td></tr><tr><td>6</td><td>« Si je comprends bien, votre priorité est le bruit dans les chambres ? »</td></tr><tr><td>7</td><td>« Un fournisseur sérieux répond dans les 24 heures. »</td></tr><tr><td>8</td><td>« Vos normes, je m'en moque, je ferai comme je l'ai décidé. »</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Attribue à chaque phrase un état du moi : PN, PC, A, EL ou EA.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Souligne le mot ou l'expression qui t'a permis de trancher.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> « il faut », « sérieux », « inadmissible » = jugement · une question factuelle = adulte · une émotion forte = enfant.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <div class="table-wrap"><table class="tableau-corr"><thead><tr><th>N°</th><th>État</th><th>Indice</th></tr></thead><tbody><tr><td>1</td><td>PC</td><td class="val">« inadmissible » : jugement</td></tr><tr><td>2</td><td>A</td><td class="val">question factuelle chiffrée</td></tr><tr><td>3</td><td>EL</td><td class="val">« génial », « j'ai hâte » : émotion spontanée</td></tr><tr><td>4</td><td>PN</td><td class="val">« ne vous inquiétez pas » : rassure</td></tr><tr><td>5</td><td>EA (soumis)</td><td class="val">« je ne décide rien » : s'en remet à l'autorité</td></tr><tr><td>6</td><td>A</td><td class="val">reformulation pour vérifier</td></tr><tr><td>7</td><td>PC</td><td class="val">« un fournisseur sérieux » : norme imposée</td></tr><tr><td>8</td><td>EA (rebelle)</td><td class="val">refus de l'autorité, « je m'en moque »</td></tr></tbody></table></div></div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Un même client peut passer d'un état à l'autre dans le même entretien : on analyse une phrase, pas une personne.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 2</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Décoder Marc Dufresne, gérant de l'hôtel Le Belvédère</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">L'hôtel <strong>Le Belvédère</strong> (42 chambres) est client de THERMIKA depuis 2022. Son gérant, <strong>Marc Dufresne</strong>, appelle pour une panne de climatisation. Extrait :<br><em>« Écoutez, je paie un contrat de maintenance de 3 600 € par an. Quand je paie, j'attends un service irréprochable. Mes clients se plaignent, ça ne peut pas continuer comme ça. »</em> Il parle fort, fait des phrases courtes et coupe la parole deux fois.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Identifie l'état du moi dominant de Marc Dufresne dans cet échange.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Relève deux indices verbaux et deux indices non verbaux.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Indique l'état du moi que tu dois adopter pour lui répondre, et justifie.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> répondre en enfant adapté (« désolé, désolé… ») ou en parent critique (« vous avez signé les conditions ») fait monter la tension.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Parent critique : il juge et pose une norme (« j'attends un service irréprochable »).</div>
+      <div class="corr-etape"><span class="c-num">2</span> Verbaux : « j'attends », « ça ne peut pas continuer comme ça » · non verbaux : volume de la voix, coupures de parole, phrases courtes.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">L'adulte : reconnaître le fait, poser des questions précises, proposer une action datée.</p><p class="conclu">C'est ce qu'attend la commission en situation 2 de l'E5 : une communication adaptée au contexte, qui garde la relation sur le terrain des faits.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 3</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Répondre depuis l'adulte</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Voici 4 phrases de clients THERMIKA. Course contre la montre : 6 minutes pour écrire tes 4 réponses dans un document partagé, puis la classe vote pour la meilleure réponse projetée.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Marc Dufresne (PC) : <em>« Votre devis est trop cher, vous vous moquez de moi. »</em></p></div>
+      <div class="question"><span class="q-num">2</span><p>Claire Vasseur, acheteuse de la clinique Saint-Roch (EA soumis) : <em>« Je ne sais pas, il faudra voir avec mon directeur. »</em></p></div>
+      <div class="question"><span class="q-num">3</span><p>Gérard Pons, adjoint au maire de Villers (EL) : <em>« Formidable, on installe tout dès lundi ! »</em></p></div>
+      <div class="question"><span class="q-num">4</span><p>Bruno Akli, directeur technique de la clinique (PC) : <em>« Les jeunes commerciaux ne connaissent rien à la technique. »</em></p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> une réponse adulte = un fait ou une reformulation + une question ouverte ou une proposition concrète.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> « Je comprends que le montant vous surprenne. Regardons ensemble ce qu'il comprend, poste par poste : quel point vous paraît trop élevé ? »</div>
+      <div class="corr-etape"><span class="c-num">2</span> « C'est normal de l'associer. Quelles informations lui seront utiles pour décider ? Je peux vous préparer une synthèse d'une page. »</div>
+      <div class="corr-etape"><span class="c-num">3</span> « Je partage votre enthousiasme. Pour lundi, il faut d'abord valider deux points : l'accès au local technique et le délai de livraison de 3 semaines. »</div>
+      <div class="corr-etape"><span class="c-num">4</span> <p class="res">« Vous avez raison d'être exigeant sur la technique. Je vous propose de vérifier ensemble les données de performance, et notre technicien peut se joindre à nous si besoin. »</p><p class="conclu">Pas de justification personnelle, pas d'affrontement : l'adulte ramène vers les faits et propose une démarche collaborative (critère E5).</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 4</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Le profil de ton interlocuteur de fiche descriptive</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Ta fiche descriptive E5 présente les interlocuteurs, leur fonction et leur rôle dans la situation d'achat. Tu complètes avec leur profil relationnel.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Note l'état du moi que ton interlocuteur active le plus souvent avec toi ou avec ton tuteur, avec un exemple de phrase réelle.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Note ton propre état du moi spontané quand tu es sous pression.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Présente les deux en 1 minute à ton binôme, qui chronomètre et te pose une question.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> appuie-toi sur un fait observé (un mail, un appel, une remarque), pas sur une impression.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : nom, fonction, état du moi dominant observé, exemple concret.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Connaître sa propre réaction (par exemple passer en enfant adapté face à un client autoritaire) permet de l'anticiper.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Ces éléments enrichissent la description des acteurs de ta fiche et répondent au critère « le contexte technico-commercial et les attentes du prospect sont identifiés ».</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 2 -->
+<div class="bloc-titre" id="transactions" style="margin-top:40px">
+  <span class="icone">🔁</span>
+  <h2><small>Séance 2</small>Bloc 2 – Pourquoi l'échange se bloque-t-il ?</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Transaction = échange entre deux états du moi : un stimulus d'un côté, une réponse de l'autre.</code>
+  <code>Transaction parallèle (complémentaire) = la réponse vient de l'état sollicité et revient vers l'état émetteur (A → A puis A → A) · l'échange peut continuer.</code>
+  <code>Transaction croisée = la réponse ne vient pas de l'état sollicité (A → A puis PC → E) · l'échange se bloque, source principale de malentendus selon Berne.</code>
+  <code>Transaction cachée = un message apparent (souvent adulte) + un message implicite (souvent parent ou enfant) · c'est le message caché qui produit l'effet.</code>
+  <code>Rôle du commercial = décoder la transaction et, si elle est insatisfaisante, la modifier en revenant à l'adulte.</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 5</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Parallèle, croisée ou cachée ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Sandrine Morel projette 5 échanges entendus chez THERMIKA. Vote à main levée, puis justification par un volontaire.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>N°</th><th>Stimulus</th><th>Réponse</th></tr></thead><tbody><tr><td>1</td><td>Client : « Quel est le délai d'installation ? »</td><td>Vendeur : « Trois semaines après signature. »</td></tr><tr><td>2</td><td>Client : « Quel est le délai d'installation ? »</td><td>Vendeur : « Vous auriez dû anticiper, c'est toujours pareil. »</td></tr><tr><td>3</td><td>Vendeur : « Ce modèle est notre haut de gamme, peut-être un peu cher pour votre structure. »</td><td>Client : « Je vais vous montrer que j'en ai les moyens. »</td></tr><tr><td>4</td><td>Client : « Cette panne m'inquiète beaucoup. »</td><td>Vendeur : « Je comprends, on s'en occupe aujourd'hui. »</td></tr><tr><td>5</td><td>Client : « Vous pouvez m'envoyer la fiche technique ? »</td><td>Vendeur : « Encore ? Je vous l'ai déjà envoyée deux fois ! »</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Classe chaque échange : parallèle, croisée ou cachée.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Pour les transactions croisées, propose une réponse adulte.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> demande-toi à quel état la question s'adresse, puis de quel état vient la réponse.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <div class="table-wrap"><table class="tableau-corr"><thead><tr><th>N°</th><th>Type</th><th>Analyse</th></tr></thead><tbody><tr><td>1</td><td>parallèle</td><td class="val">A → A, A → A</td></tr><tr><td>2</td><td>croisée</td><td class="val">A → A, réponse PC → E</td></tr><tr><td>3</td><td>cachée</td><td class="val">message adulte apparent, défi implicite adressé à l'enfant du client</td></tr><tr><td>4</td><td>parallèle</td><td class="val">E → P, réponse PN → E</td></tr><tr><td>5</td><td>croisée</td><td class="val">A → A, réponse PC → E</td></tr></tbody></table></div></div>
+      <div class="corr-etape"><span class="c-num">2</span> N°2 : « Trois semaines après signature. Si vous avez une contrainte de date, dites-la-moi, je vérifie le planning. » · N°5 : « Bien sûr, je vous la renvoie tout de suite. Elle est aussi disponible dans votre espace client. »</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">La n°3 est une technique de manipulation : la commission valorise une négociation loyale, fondée sur les besoins réels du client.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 6</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Réparer un entretien raté avec la clinique Saint-Roch</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">La <strong>clinique Saint-Roch</strong> (180 lits) prépare le remplacement de sa centrale de traitement d'air, budget estimé à <strong>145 000 € HT</strong>. Un commercial junior de THERMIKA a mené le premier rendez-vous avec <strong>Bruno Akli</strong>, directeur technique. Extrait :<br>Bruno Akli : <em>« Quel est le niveau sonore de votre centrale en fonctionnement nominal ? »</em><br>Commercial : <em>« Vous savez, toutes nos installations sont silencieuses, faites-nous confiance. »</em><br>Bruno Akli : <em>« Je ne vous demande pas de confiance, je vous demande un chiffre. »</em><br>Commercial : <em>« Pas la peine de vous énerver, je vous l'enverrai. »</em></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Analyse les deux transactions : états émetteurs, états récepteurs, type.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Explique les conséquences possibles pour l'affaire.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Réécris les deux répliques du commercial.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> un directeur technique attend des données mesurables : un niveau en dB(A), une norme, une fiche technique.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Transaction 1 : Akli A → A, le commercial répond en PN (« faites-nous confiance ») = croisée. Transaction 2 : Akli PC, le commercial répond PC → E (« pas la peine de vous énerver ») = croisée, l'escalade commence.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Perte de crédibilité technique auprès d'un prescripteur clé du centre d'achat · risque de ne pas être consulté pour l'appel d'offres.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">« Notre centrale est mesurée à 42 dB(A) à 3 mètres, selon la fiche du constructeur. Quel niveau maximal visez-vous pour les chambres ? » · puis, si le chiffre manque : « Je n'ai pas la valeur exacte pour cette configuration, je vous l'envoie avant 17 h avec la fiche technique. »</p><p class="conclu">Le chiffre de 42 dB(A) est fictif : en situation réelle, ne jamais inventer une donnée technique, s'engager plutôt sur un délai de réponse.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 7</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Repérer la transaction cachée dans un mail</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Claire Vasseur, acheteuse de la clinique Saint-Roch, t'écrit :<br><em>« Bonjour, nous avons bien reçu votre proposition. Nous avons aussi reçu celle d'un autre fournisseur, qui semble avoir mieux compris nos contraintes budgétaires. Pouvez-vous revoir votre copie ? Cordialement. »</em></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Identifie le message apparent et le message caché.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Rédige une réponse de 5 lignes maximum qui reste dans l'adulte et protège ta marge.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> ne baisse pas le prix par écrit avant d'avoir compris ce que l'acheteuse compare.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Apparent (A → A) : une demande de révision. Caché (PC → E) : « vous êtes moins bon que votre concurrent », pour obtenir une remise.</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="res">« Bonjour Madame Vasseur, merci pour votre retour. Pour comparer les deux offres sur une base identique, pouvez-vous m'indiquer les postes qui vous semblent écarter nos propositions (matériel, maintenance, délai) ? Je vous propose un échange de 20 minutes jeudi ou vendredi. Cordialement. »</p><p class="conclu">La réponse demande des faits, propose une action et évite la remise spontanée : c'est une démarche proactive de négociation.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 8</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Jeu de rôle : l'objection prix en parent critique</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Groupes de 3 : un vendeur THERMIKA, un Marc Dufresne en parent critique, un observateur. Situation : renouvellement du contrat de maintenance, passé de 3 600 € à <strong>3 960 € HT</strong> par an. Durée : 3 minutes, puis rotation des rôles.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Calcule la hausse en pourcentage avant de jouer.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Joue la scène. L'observateur note chaque transaction croisée et le moment où le vendeur revient à l'adulte.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Débriefe en 1 minute : une réussite, un point à améliorer.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> prépare deux éléments factuels qui justifient la hausse (pièces, déplacements, nouvelles obligations d'entretien).</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <code>Hausse = (3 960 – 3 600) / 3 600 = 360 / 3 600 = 10,0 %</code></div>
+      <div class="corr-etape"><span class="c-num">2</span> Attendus : écoute sans couper · reformulation (« vous trouvez la hausse injustifiée ») · justification chiffrée · question ouverte · contrepartie possible plutôt que remise sèche (par exemple une visite préventive supplémentaire).</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Ce travail prépare la situation 2 de l'E5 : la commission observe ta capacité à mobiliser des outils de communication adaptés au contexte.</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 3 -->
+<div class="bloc-titre" id="positions" style="margin-top:40px">
+  <span class="icone">🤝</span>
+  <h2><small>Séance 3</small>Bloc 3 – Positions de vie et signes de reconnaissance</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Position de vie = opinion qu'une personne a d'elle-même et des autres (Harris, 1967 · Ernst, 1971).</code>
+  <code>+/+ je suis OK, tu es OK : coopération, recherche de solutions · +/– je suis OK, tu n'es pas OK : domination, mépris · –/+ je ne suis pas OK, tu es OK : soumission, effacement · –/– personne n'est OK : abandon, fatalisme.</code>
+  <code>Signe de reconnaissance (strokes) = attention portée à l'autre · positif ou négatif.</code>
+  <code>Conditionnel = porte sur ce que l'autre fait (« j'apprécie votre façon de mener cet entretien ») · inconditionnel = porte sur ce qu'il est (« vos méthodes de travail sont agréables »).</code>
+  <code>Objectif du commercial = se placer et placer son client en +/+ · émettre des signes de reconnaissance sincères et précis.</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 9</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Quelle position de vie ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Sandrine Morel décrit 4 comportements observés pendant des rendez-vous THERMIKA.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>N°</th><th>Comportement</th></tr></thead><tbody><tr><td>1</td><td>Un commercial accepte toutes les demandes de remise sans discuter : « vous avez sûrement raison ».</td></tr><tr><td>2</td><td>Gérard Pons, adjoint au maire : « de toute façon, avec notre budget, rien ne marchera jamais ».</td></tr><tr><td>3</td><td>Bruno Akli coupe la parole et corrige chaque phrase du commercial.</td></tr><tr><td>4</td><td>Claire Vasseur : « vos contraintes de délai, je les entends, voici les miennes, cherchons un calendrier commun ».</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Associe chaque comportement à une position de vie.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Indique la position qui permet une négociation gagnant-gagnant.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> 1 : –/+ (soumission) · 2 : –/– (fatalisme) · 3 : +/– (domination) · 4 : +/+ (coopération).</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="res">La position +/+.</p><p class="conclu">Le commercial en –/+ brade sa marge, celui en +/– perd le client : la commission attend un équilibre entre les intérêts de l'entreprise et ceux du client.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 10</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Trier les signes de reconnaissance</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Phrases entendues ou écrites dans des échanges avec les clients de THERMIKA.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>N°</th><th>Phrase</th></tr></thead><tbody><tr><td>1</td><td>« Votre cahier des charges est très clair, il nous a fait gagner du temps. »</td></tr><tr><td>2</td><td>« C'est toujours un plaisir de travailler avec vous. »</td></tr><tr><td>3</td><td>« Votre bon de commande était incomplet, on a perdu une semaine. »</td></tr><tr><td>4</td><td>« Avec vous, c'est toujours compliqué. »</td></tr><tr><td>5</td><td>« Merci d'avoir organisé la visite du local technique aussi vite. »</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Classe chaque phrase : positif ou négatif, conditionnel ou inconditionnel.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Repère la phrase à bannir et explique pourquoi.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Rédige un signe de reconnaissance conditionnel positif pour Bruno Akli, qui t'a transmis les plans de la clinique en 24 heures.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> 1 : positif conditionnel · 2 : positif inconditionnel · 3 : négatif conditionnel · 4 : négatif inconditionnel · 5 : positif conditionnel.</div>
+      <div class="corr-etape"><span class="c-num">2</span> La n°4 : elle vise la personne, pas un fait. Elle ne peut pas être corrigée et place le client en position basse. La n°3 reste acceptable si elle est formulée avec une solution.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">« Merci pour l'envoi des plans en 24 heures : grâce à eux, notre bureau d'études peut chiffrer le réseau de gaines dès cette semaine. »</p><p class="conclu">Précis, sincère, relié à un bénéfice pour le client : c'est un outil de communication à part entière.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 11</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Le mail de suivi après installation</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">THERMIKA a terminé l'installation de 2 pompes à chaleur à la mairie de Villers, pour <strong>68 000 € HT</strong>. Gérard Pons a été très disponible pendant le chantier. Ta tutrice te demande un mail de suivi qui renforce la relation et ouvre une nouvelle affaire : le contrat de maintenance.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Rédige le mail (8 lignes maximum) avec au moins un signe de reconnaissance conditionnel positif.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Indique la position de vie que ton mail installe.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Échange ton mail avec ton voisin : il surligne le signe de reconnaissance et note ta proposition d'action de suivi.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Exemple : « Monsieur Pons, l'installation est terminée et les essais sont conformes. Votre disponibilité pour l'accès aux locaux a permis de livrer avec 2 jours d'avance : merci. Pour garantir les performances dans la durée, je vous propose un rendez-vous de 30 minutes pour présenter nos formules de maintenance. Seriez-vous disponible la semaine du 16 ? »</div>
+      <div class="corr-etape"><span class="c-num">2</span> +/+ : chacun a contribué à la réussite.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Ce mail correspond au critère « des actions de suivi sont effectuées » (C1.5) : pense à en joindre un exemple dans les annexes de ta fiche descriptive.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 12</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Le tour de table des signes de reconnaissance</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Chaque étudiant présente en 1 minute 30 l'historique de la relation avec le client de sa fiche descriptive. La personne suivante doit commencer par un signe de reconnaissance conditionnel positif sur la prestation entendue, avant de présenter à son tour.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Prépare ta présentation : date du premier contact, affaires réalisées, situation actuelle.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Pendant les passages, note une qualité précise de la personne qui te précède.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Identifie la position de vie de ton client vis-à-vis de ton entreprise aujourd'hui.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : chronologie claire, chiffres (courant d'affaires), positionnement de l'entretien dans la démarche commerciale globale.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Un bon signe vise un fait : « ta chronologie était claire grâce aux dates », pas « c'était bien ».</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Un client déçu par un incident passé peut être en +/– face à ton entreprise : c'est une donnée à intégrer dans ta stratégie et dans l'analyse du risque client.</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 4 -->
+<div class="bloc-titre" id="pnl" style="margin-top:40px">
+  <span class="icone">👁</span>
+  <h2><small>Séance 4</small>Bloc 4 – La PNL : voir, entendre, ressentir</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Programmation neurolinguistique (PNL) = approche de la communication créée par Richard Bandler et John Grinder dans les années 1970.</code>
+  <code>Trois canaux sensoriels principaux = visuel (images) · auditif (sons) · kinesthésique (sensations tactiles et internes, goût, odorat).</code>
+  <code>Mots repères = visuel : « c'est clair », « je vois » · auditif : « ça me parle », « je me dis que » · kinesthésique : « je le sens bien », « je pense que », « concrètement ».</code>
+  <code>Adaptation = repérer le canal préféré puis s'y ajuster par mimétisme · le visuel veut voir (schéma, photo) · l'auditif aime écouter et échanger · le kinesthésique veut toucher, tester, ressentir l'ambiance.</code>
+  <code>Limite = les revues de recherche (Witkowski, 2010 · Sturt et al., 2012) ne trouvent pas de preuve solide de l'efficacité de la PNL · à utiliser comme outil d'observation, pas comme une science.</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 13</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Visuel, auditif ou kinesthésique ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Quiz projeté : 15 secondes par phrase, réponse V, A ou K sur ton ordinateur, correction collective.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>N°</th><th>Phrase du client</th></tr></thead><tbody><tr><td>1</td><td>« Montrez-moi à quoi ça ressemble une fois installé. »</td></tr><tr><td>2</td><td>« Ce que vous me dites, ça sonne juste. »</td></tr><tr><td>3</td><td>« J'ai besoin de sentir que le projet est solide. »</td></tr><tr><td>4</td><td>« Je ne vois pas où vous voulez en venir. »</td></tr><tr><td>5</td><td>« Expliquez-moi ça, je vous écoute. »</td></tr><tr><td>6</td><td>« Je peux toucher le matériel avant de signer ? »</td></tr><tr><td>7</td><td>« Votre offre est floue. »</td></tr><tr><td>8</td><td>« Ça ne me dit rien qui vaille. »</td></tr><tr><td>9</td><td>« Le contact avec votre technicien était chaleureux. »</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Attribue un canal à chaque phrase.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Compte ton score sur 9.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> V : 1, 4, 7 · A : 2, 5, 8 · K : 3, 6, 9.</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Une seule phrase ne suffit pas : on repère un canal préféré quand les mêmes types de mots reviennent tout au long de l'échange.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 14</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Un argument, trois versions</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Argument de base THERMIKA : <em>« Notre pompe à chaleur réduit la facture de chauffage de 30 % et fonctionne sans bruit gênant. »</em> Tu dois l'adapter à trois interlocuteurs : Claire Vasseur (visuelle), Bruno Akli (auditif), Marc Dufresne (kinesthésique).</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Réécris l'argument pour chacun, avec les mots et le support adaptés.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Pour l'hôtel, la facture de chauffage annuelle est de <strong>27 500 €</strong>. Calcule l'économie annuelle.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Lis une de tes versions à voix haute : la classe devine à quel interlocuteur elle s'adresse.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> un visuel = un graphique ou une photo · un auditif = un témoignage, une explication posée · un kinesthésique = une visite, un essai, une sensation de confort.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Visuel : « Regardez ce graphique : la courbe de consommation baisse de 30 % dès la première année. » · Auditif : « Écoutez ce que nous a dit le directeur de la clinique voisine : plus aucune plainte pour le bruit, et 30 % d'économie. » · Kinesthésique : « Je vous propose de visiter une installation : vous sentirez le confort des chambres, et vos clients ne l'entendront pas. »</div>
+      <div class="corr-etape"><span class="c-num">2</span> <code>Économie annuelle = 27 500 × 30 % = 8 250 €</code></div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Le fond reste le même : seul le canal change. C'est l'adaptation de l'argumentation au client attendue en E5.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 15</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Débat express : la PNL, outil ou mythe ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Ta tutrice a suivi une formation PNL et l'utilise. Un collègue affirme que c'est de la pseudo-science. Deux équipes, 4 minutes de préparation, 2 minutes d'argumentation chacune, 1 minute de réponse.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Équipe 1 : défends l'usage de la PNL en entretien de vente.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Équipe 2 : présente ses limites, en t'appuyant sur le mémo.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Ensemble : rédige une phrase de synthèse que tu pourrais dire à la commission.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Arguments pour : elle oblige à observer et écouter le client · elle encourage à varier les supports (schéma, témoignage, démonstration) · elle est largement diffusée dans les formations commerciales.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Arguments contre : les revues de recherche (Witkowski, 2010 · Sturt et al., 2012) ne montrent pas de preuve solide de son efficacité · enfermer un client dans un « profil » est réducteur · le mimétisme exagéré peut être perçu comme de la manipulation.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">« J'utilise la PNL comme une grille d'observation pour adapter mes supports, pas comme une méthode scientifique : ce qui compte, c'est l'écoute active et la reformulation. »</p><p class="conclu">Le guide d'accompagnement du BTS CCST cite l'écoute active, l'empathie et la reformulation : ce sont elles qui restent au cœur de ta pratique.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 16</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Adapter ton argument clé à ton interlocuteur réel</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Reprends l'argument principal de ta stratégie de négociation (fiche descriptive E5).</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Repère dans tes échanges réels (mails, appels) 3 expressions de ton interlocuteur et déduis son canal préféré.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Adapte ton argument et choisis le support à préparer (visuel, témoignage, démonstration).</p></div>
+      <div class="question"><span class="q-num">3</span><p>Présente-le en 2 minutes à un binôme qui joue ton client. Il note s'il s'est senti compris.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : 3 expressions réelles citées, canal déduit avec prudence (« il semble privilégier… »).</div>
+      <div class="corr-etape"><span class="c-num">2</span> Le support choisi devient un outil de négociation à placer en annexe de ta fiche descriptive.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Critère E5 visé : « des outils de communication et de négociation adaptés au contexte sont mobilisés ».</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 5 -->
+<div class="bloc-titre" id="examen" style="margin-top:40px">
+  <span class="icone">🎓</span>
+  <h2><small>Séance 5</small>Bloc 5 – Entraînement à l'épreuve E5</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Épreuve E5 – conception et négociation de solutions technico-commerciales (anciennement E4).</code>
+  <code>Situation 1 : présentation orale de la préparation d'un entretien (20 min au maximum) + entretien avec la commission (10 min au maximum).</code>
+  <code>Situation 2 : négociation simulée à partir de la situation modifiée (15 à 20 min) + entretien (10 min au maximum).</code>
+  <code>Une attention particulière est portée au respect des règles de communication professionnelle attendues d'un technicien supérieur.</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 17</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Sujet complet : présenter les acteurs THERMIKA – clinique Saint-Roch</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Tu présentes à la commission la préparation de ton entretien avec la clinique Saint-Roch pour la centrale de traitement d'air (145 000 € HT).</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Présente en 4 minutes les interlocuteurs (Claire Vasseur, Bruno Akli), leur rôle dans l'achat, leur profil relationnel et l'adaptation que tu prévois pour chacun.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Le groupe évalue avec deux critères : contexte et attentes identifiés · outils de communication adaptés.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Plan attendu : 1. la clinique et son projet · 2. Claire Vasseur, acheteuse : utilise des transactions cachées pour obtenir des remises, canal plutôt visuel → offre comparative claire, questions factuelles · 3. Bruno Akli, prescripteur technique : parent critique, auditif → données chiffrées, explication posée, présence possible d'un technicien · 4. posture visée : adulte, position +/+ · 5. outils : tableau comparatif, fiche technique, témoignage client.</div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 18</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Les questions de la commission</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Après ta présentation, la commission t'interroge. Un étudiant joue le jury, un autre répond, 30 secondes par réponse, puis on change.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>« Sur quoi vous appuyez-vous pour dire que M. Akli est en parent critique ? »</p></div>
+      <div class="question"><span class="q-num">2</span><p>« La PNL est-elle une méthode fiable ? »</p></div>
+      <div class="question"><span class="q-num">3</span><p>« Que faites-vous si vous sentez que vous perdez votre calme pendant l'entretien ? »</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Sur des faits observés : ses phrases (« je vous demande un chiffre »), ses mails, son attitude lors du premier rendez-vous. On parle d'un état activé dans une situation, pas d'un trait définitif.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Réponse honnête : son efficacité n'est pas démontrée scientifiquement, je l'utilise comme grille d'observation pour adapter mes supports.</div>
+      <div class="corr-etape"><span class="c-num">3</span> Je repère que je passe en enfant ou en parent critique, je reformule ce que dit le client et je reviens aux faits avec une question ouverte.</div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 19</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Changement de paramètre et check-list de ta fiche</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">La commission modifie la situation : Claire Vasseur est absente. Le rendez-vous est maintenu avec <strong>Hélène Garnier</strong>, directrice de la clinique, pressée, enthousiaste sur les économies d'énergie mais impatiente (enfant libre), qui dit : <em>« Je n'ai que 10 minutes, montrez-moi l'essentiel. »</em></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Identifie son état du moi et son canal préféré probables.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Joue les 5 premières minutes avec un binôme. Un troisième étudiant observe et chronomètre.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Vérifie ensuite que ta fiche descriptive précise, pour chaque interlocuteur : fonction, rôle dans l'achat, profil relationnel observé, adaptation prévue.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> canalise son enthousiasme vers l'adulte : un chiffre clé, un visuel, une décision à prendre.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Enfant libre (impatience, enthousiasme) · canal visuel probable (« montrez-moi »).</div>
+      <div class="corr-etape"><span class="c-num">2</span> Attendus : prise de contact courte · signe de reconnaissance sur son projet · une page visuelle avec le chiffre clé (économie annuelle) · une question pour valider ses priorités · objectif de repli : obtenir son accord pour une réunion avec Claire Vasseur et Bruno Akli.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">La fiche descriptive décrit les interlocuteurs, leurs fonctions et leurs rôles dans la situation d'achat : le profil relationnel complète cette rubrique et justifie les outils placés en annexe.</p></div>
+    </div>
+  </div>
+</details>
+</main>
+
+<footer class="site-footer">
+  BTS CCST – Bloc 1, épreuve E5 &nbsp;|&nbsp; Chapitre 9 : pratiquer l'analyse transactionnelle et la PNL &nbsp;|&nbsp; 19 exercices progressifs
+</footer>
+
+
+<script>
+function toggleCorr(btn) {
+  const corr = btn.nextElementSibling;
+  const isVisible = corr.classList.contains('visible');
+  corr.classList.toggle('visible', !isVisible);
+  btn.textContent = isVisible ? '✅ Voir la correction' : '🔒 Masquer la correction';
+}
+</script>
+</body>
+</html>
